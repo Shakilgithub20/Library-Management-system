@@ -1,0 +1,184 @@
+CREATE TABLE addbook ( id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+ name VARCHAR(150) NOT NULL ,author VARCHAR(150) NOT NULL, cost VARCHAR(150) NOT NULL , 
+ quantity VARCHAR(150) NOT NULL,catagory VARCHAR(150) NOT NULL )
+
+
+ ===++++====
+ ----====
+ --==
+
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="signup.css">
+<link rel="stylesheet" type="text/css" href="style.css">
+<link rel="stylesheet" type="text/css" href="table.css">
+</head>
+<body>
+<div class="row">
+
+  <div class="container">
+  
+  <div class="row">
+    <form action="store.php" method="post">
+	<input type="submit" value="Show Product" name="show">
+	</form>
+	<?php
+ include("../connection.php");
+ if(isset($_POST['show']))
+ {
+ $sql="select * from product";
+ $r=mysqli_query($con,$sql);
+ echo "<table id='customers'>";
+ echo "<tr>
+ <th>Product ID</th>
+ <th>Product Name</th>
+ <th>Product Type</th>
+ <th>Brand Name</th>
+ <th>Buying Price</th>
+  </tr>";
+    while($row=mysqli_fetch_array($r))
+    {
+        $id=$row['p_id'];
+		$pname=$row['pname'];
+		$type=$row['ptype'];
+		$brand=$row['brandname'];
+		$price=$row['bprice'];
+    echo "<tr>
+    <td>$id</td><td>$pname</td><td>$type</td><td>$brand</td><td>$price</td>
+    </tr>";
+    }
+	echo "</table>";
+ }
+?>
+  </div>
+  <form action="store.php" method="post">
+  <div class="row">
+  <hr/>
+  <h2 align='center'>Store New Product Information</h2>
+    <div class="col-25">
+      <label for="name">Product ID</label>
+    </div>
+    <div class="col-75">
+	<select name="pid">
+<?php
+ include("../connection.php");
+ $sql="select p_id from product";
+ $r=mysqli_query($con,$sql);
+ 
+ 
+    while($row=mysqli_fetch_array($r))
+    {
+        $id=$row['p_id'];
+        echo "<option value='$id'>$id</option>";
+    }
+ 
+ 
+ 
+?>
+</select>
+    </div>
+  </div>
+  
+  
+  <div class="row">
+    <div class="col-25">
+      <label for="quantity">Quantity</label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="quantity" name="quantity" placeholder="quantity..">
+	  </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-25">
+      <label for="sprice">Selling Price</label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="sprice" name="sprice" placeholder="Selling Price..">
+    </div>
+  </div>
+  
+  <div class="row">
+    <input type="submit" value="Add" name="submit">
+  </div>
+  </form>
+</div>
+</div>
+
+<div class="footer">
+  <h2>Copyright@puc.cse</h2>
+  
+</div>
+
+</body>
+</html>
+
+<?php
+include("../connection.php");
+if(isset($_POST['submit']))
+{
+	$pid=$_POST['pid'];
+	$quantity=$_POST['quantity'];
+	$sprice=$_POST['sprice'];
+	
+	$query="insert into store values('$pid',$sprice,$quantity)";
+	if(mysqli_query($con,$query))
+	{
+		echo "Successfully inserted!";
+    }
+	else
+	{
+		echo "error!".mysqli_error($con);
+	}
+}
+?>
+=====
+cart ---
+<?php
+   // Cart implementation code
+   if(isset($_POST['add']))
+   {
+	   if(isset($_SESSION['cart']))  
+	   {
+		 $item_array_id=array_column($_SESSION['cart'],'item_id'); 
+ 		 if(!in_array($_GET['id'],$item_array_id))
+		 {
+			 $count=count($_SESSION['cart']);
+			 $item_array= array ( 
+		   'item_id' => $_GET['id'],
+		   'item_name' => $_POST['hname'],
+		   'item_price' => $_POST['hprice'],
+		   'item_q' => $_POST['quantity']
+		   );
+			$_SESSION['cart'][$count]=$item_array; 
+		 }
+		 else
+		 {
+			 echo "<script>alert('Item already added')</script>";
+			 echo "<script>window.location='product.php'</script>";
+		 }
+	   }	
+       else
+	   {
+		   $item_array= array ( 
+		   'item_id' => $_GET['id'],
+		   'item_name' => $_POST['hname'],
+		   'item_price' => $_POST['hprice'],
+		   'item_q' => $_POST['quantity']
+		   );
+		   $_SESSION['cart'][0]=$item_array;
+	   }		   
+   }
+   // Item Remove from cart
+   if(isset($_GET['action']) and $_GET['action'] == 'delete')
+   {
+	  foreach ($_SESSION['cart'] as $keys => $values)
+	  {
+		  if($values['item_id'] == $_GET['id'])
+		  {
+			  unset($_SESSION['cart'][$keys]);
+		  }
+	  }		  
+   }
+   ?>

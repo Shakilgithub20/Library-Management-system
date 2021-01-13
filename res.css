@@ -1,0 +1,29 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+     background-image: url(image/ps.jpg);
+     background-repeat: no-repeat;
+     background-size: 100% 650px; 
+      
+}
+h1{
+    color: whitesmoke;
+    text-align: center;
+    font-style: italic;
+    padding: 20px;
+}
+.reg{
+    width: 35%;
+    margin: auto;
+    border-radius: 5px;
+    background-color: chocolate;
+    padding:20px ;
+    text-align: center;
+    font-style: italic;
+}
+h2{
+    color: cornsilk;
+    font-style: italic;
+}
