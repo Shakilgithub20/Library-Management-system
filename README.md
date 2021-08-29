@@ -19,6 +19,6 @@ Admin can add/update/ delete books
 
 Admin can search customer by using their  customer ID
 
-Admin can also view  customert details
+Admin can also view  customer details
 
 Admin can change own password.
